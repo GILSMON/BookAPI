@@ -23,6 +23,11 @@ const author = [
         id : 2,
         name : "MarkZu",
         books:["123Book", "lifeofzu"],
+    },
+    {
+        id : 3,
+        name : "john",
+        books:[],
     }
 ];
 
@@ -35,4 +40,3 @@ const publication = [
 ];
 
 module.exports = {books, author, publication};
-
