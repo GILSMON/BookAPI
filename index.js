@@ -1,4 +1,10 @@
+// dot env for security
+require("dotenv").config();
+
 const express = require("express");
+
+//  database
+const mongoose = require("mongoose");
 
 // Initialization
 
@@ -6,6 +12,14 @@ const booky = express();
 
 // configuring for POSTMAN
 booky.use(express.json());
+
+// establish database connection  : check mongoose website
+mongoose.connect(process.env.MONGO_URL,{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true
+}).then(() => console.log("connection established"));
 
 // Database
 const database = require("./database");
@@ -216,3 +230,5 @@ booky.put("/book/update/author/:isbn/:authorId", (req, res) => {
 });
 
 booky.listen(3000, () => console.log("server setup done"));
+
+// MONGOOSE : CONVERT JAVASCRIPT INTO mongoDB underrstandable language
