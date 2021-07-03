@@ -17,14 +17,13 @@
 // Books
 // we need an API 
 //  GET
-// to get all books            : DONE
-// to get specific books       : DONE
-// to get list of books
-// to get list of books based on category       : DONE
+// to get all books            : DONE      database done
+// to get specific books       : DONE       database done
+// to get list of books based on category       : DONE   database done
 // to get list of books based on languages
 
 // POST
-// Add new book
+// Add new book  : DONE    database done
 
 // PUT 
 // update book title  :DONE
@@ -39,13 +38,13 @@
 // we need an API 
 
 // GET
-// to get all authors               : DONE
+// to get all authors               : DONE   database done
 // to get specific Authors
 // to get list of Authors  based on book        : DONE
 
 
 // POST
-// add new author
+// add new author       DONE :      database done
 
 // PUT
 // update author name 
