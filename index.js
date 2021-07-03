@@ -14,15 +14,17 @@ const booky = express();
 booky.use(express.json());
 
 // establish database connection  : check mongoose website
-mongoose.connect(process.env.MONGO_URL,{
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-}).then(() => console.log("connection established"));
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  })
+  .then(() => console.log("connection established"));
 
 // Database
-const database = require("./database");
+const database = require("./database/index");
 
 /*
 Route               /
@@ -226,7 +228,7 @@ booky.put("/book/update/author/:isbn/:authorId", (req, res) => {
       return author.books.push(req.params.isbn);
   });
 
-  return res.json({ books: database.books, author: database.author });   
+  return res.json({ books: database.books, author: database.author });
 });
 
 booky.listen(3000, () => console.log("server setup done"));
