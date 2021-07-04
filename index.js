@@ -39,11 +39,11 @@ Parameters          NONE
 Methods             GET
 */
 
-booky.get("/", async(req, res) => {
+booky.get("/", async (req, res) => {
   // mongodb
   const getAllBooks = await BookModel.find();
 
-  return res.json(getAllBooks );
+  return res.json(getAllBooks);
 });
 
 /*
@@ -54,10 +54,9 @@ Parameters          isbn
 Methods             GET
 */
 
-booky.get("/is/:isbn",async (req, res) => {
-
-  // mongodb method 
-  const getSpecificBook = await BookModel.findOne({ISBN: req.params.isbn});
+booky.get("/is/:isbn", async (req, res) => {
+  // mongodb method
+  const getSpecificBook = await BookModel.findOne({ ISBN: req.params.isbn });
 
   // our database method
   // const getSpecificBook = database.books.filter(
@@ -78,9 +77,10 @@ Parameters          category
 Methods             GET
 */
 
-booky.get("/c/:category", async(req, res) => {
-
-  const getSpecificBook = await BookModel.findOne({category: req.params.category,}); 
+booky.get("/c/:category", async (req, res) => {
+  const getSpecificBook = await BookModel.findOne({
+    category: req.params.category,
+  });
 
   // const getSpecificBook = database.books.filter((book) =>
   //   book.category.includes(req.params.category)
@@ -109,7 +109,6 @@ Methods             GET
 */
 
 booky.get("/author/", async (req, res) => {
-
   const getAllAuthor = await AuthorModel.find();
   return res.json({ authors: getAllAuthor });
 });
@@ -167,12 +166,12 @@ Parameters          NONE
 Methods             POST
 */
 // using POSTMON
-booky.post("/book/add",async (req, res) => {
+booky.post("/book/add", async (req, res) => {
   const { newBook } = req.body; //destructuring
 
   BookModel.create(newBook);
   return res.json({
-    message: "book was added"
+    message: "book was added",
   });
 });
 
@@ -189,7 +188,7 @@ booky.post("/author/add", async (req, res) => {
 
   AuthorModel.create(newAuthor);
   return res.json({
-    message: "new author is added"
+    message: "new author is added",
   });
 });
 
@@ -211,14 +210,20 @@ Parameters          isbn
 Methods             PUT 
 */
 
-booky.put("/book/update/title/:isbn", (req, res) => {
-  database.books.forEach((book) => {
-    if (book.ISBN === req.params.isbn) {
-      book.title = req.body.newBookTitle;
-      return;
+booky.put("/book/update/title/:isbn", async (req, res) => {
+  // mongoose
+  const updatedBook = await BookModel.findOneAndUpdate(
+    {
+      ISBN: req.params.isbn, // find the book
+    },
+    {
+      title: req.body.newBookTitle, // update the book title
+    },
+    {
+      new: true, // to return new value
     }
-  });
-  return res.json({ books: database.books });
+  );
+  return res.json({ books: updatedBook });
 });
 
 /*
@@ -229,24 +234,61 @@ Parameters          isbn
 Methods             PUT 
 */
 
-booky.put("/book/update/author/:isbn/:authorId", (req, res) => {
+booky.put("/book/update/author/:isbn", async (req, res) => {
   //update book database
 
-  database.books.forEach((book) => {
-    if (book.ISBN === req.params.isbn) {
-      return book.author.push(parseInt(req.params.authorId));
+  // mongoose
+  const updatedBook = await BookModel.findOneAndUpdate(
+    {
+      ISBN: req.params.isbn,
+    },
+    {
+      $addToSet: {
+        author: req.body.newAuthor,
+      },
+    },
+    {
+      new: true,
     }
-  });
-
+  );
   // update author database
+  // mongoose
 
-  database.author.forEach((author) => {
-    if (author.id === parseInt(req.params.authorId))
-      return author.books.push(req.params.isbn);
-  });
-
-  return res.json({ books: database.books, author: database.author });
+  const updatedAuthor = await AuthorModel.findOneAndUpdate(
+    {
+      id: req.body.newAuthor,
+    },
+    {
+      $addToSet: {
+        books: req.params.isbn,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+  return res.json({ books: updatedBook, author: updatedAuthor });
 });
+
+
+  // database.books.forEach((book) => {
+  //   if (book.ISBN === req.params.isbn) {
+  //     return book.author.push(req.body.newAuthor);
+  //   }
+  // });
+  //   database.author.forEach((author) => {
+  //     if (author.id === parseInt(req.params.authorId))
+  //       return author.books.push(req.params.isbn);
+  //   });
+
+/*
+Route               /book/delete
+Description         delete a book
+Access              PUBLIC
+Parameters          isbn
+Methods             DELETE
+*/
+
 
 booky.listen(3000, () => console.log("server setup done"));
 

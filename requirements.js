@@ -26,8 +26,8 @@
 // Add new book  : DONE    database done
 
 // PUT 
-// update book title  :DONE
-// add/update new author  : DONE
+// update book title  :DONE      database done
+// add/update new author  : DONE  database done
 
 // DELETE
 // delete a book
